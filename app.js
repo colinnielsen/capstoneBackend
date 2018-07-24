@@ -4,21 +4,18 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const app = express();
 const cors = require('cors');
-const mixes = require("./routes/mixes");
-const favmixes = require("./routes/favmixes");
+const models = require("./models.js");
 const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
 const multer = require("multer");
 const queries = require("./queries");
-const favqueries = require("./queries_favmixes");
 
 app.use(morgan('dev'));
 
 
 app.use(bodyParser.json());
 app.use(cors())
-app.use("/mixes", mixes);
-app.use("/favmixes", favmixes);
+app.use("/models", models);
 
 const s3 = new aws.S3({
     apiVersion: "2006-03-01",
@@ -32,7 +29,7 @@ const s3 = new aws.S3({
 const upload = multer({
     storage: multerS3({
         s3,
-        bucket: "mixtap-mixes",
+        bucket: "capstoneportfolio",
         key: (request, file, next) => {
             next(null, `${Date.now()}_${file.originalname}`);
         }
@@ -46,52 +43,18 @@ app.get("/upload", (request, response, next) => {
 });
 
 app.post("/upload",
-
-    upload.array("audio", 1), (request, response) => {
+    upload.array("application/json", 1), (request, response) => {
         response.json({
-            audioUrl: `${request.files[0].location}`
+            modelUrl: `${request.files[0].location}`
         });
     });
 
-app.get("/mixes", (request, response, next) => {
+app.get("/models", (request, response, next) => {
     queries
         .list()
-        .then(mixes => {
+        .then(models => {
             response.json({
-                mixes
-            });
-        })
-        .catch(next);
-});
-
-app.post("/mixes", (request, response, next) => {
-    console.log("body is   ", request.body);
-    queries
-        .create(request.body)
-        .then(fav => {
-            response.status(201).json({
-                fav
-            });
-        })
-        .catch(next);
-});
-
-app.get("/favmixes", (request, response) => {
-    database("favmixes")
-        .select()
-        .then(favmixes => {
-            response.send({
-                favmixes
-            });
-        });
-});
-
-app.post("/favmixes", (request, response, next) => {
-    favqueries
-        .create(request.body)
-        .then(fav => {
-            response.status(201).json({
-                fav
+                models
             });
         })
         .catch(next);

@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/colinnielsen/capstoneBackend#readme",
   "dependencies": {
-    "aws-sdk": "^2.277.1",
+    "aws-sdk": "^2.279.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
