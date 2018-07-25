@@ -19,7 +19,7 @@ app.use("/models", models);
 
 const s3 = new aws.S3({
     apiVersion: "2006-03-01",
-    region: "us-east-1",
+    region: "us-east-2",
     credentials: {
         secretAccessKey: process.env.SECRET_ACCESS_KEY,
         accessKeyId: process.env.ACCESS_KEY_ID

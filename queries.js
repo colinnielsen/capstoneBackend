@@ -1,28 +1,28 @@
-const database = require("./database-connection");
+const database = require("./connection.js");
 
 module.exports = {
     list() {
-        return database("mixtable").select();
+        return database("models").select();
     },
     read(id) {
-        return database("mixtable")
+        return database("models")
             .select()
             .where("id", id)
             .first();
     },
-    create(mixtable) {
-        return database("mixtable")
-            .insert(mixtable)
+    create(models) {
+        return database("models")
+            .insert(models)
             .returning("*")
             .then(record => record[0]);
     },
-    update(id, mixtable) {
-        return database("mixtable")
+    update(id, models) {
+        return database("models")
             .where("id", id)
-            .update(mixtable, "*")
+            .update(models, "*")
             .then(record => record[0]);
     },
     delete(id) {
-        return database("mixtable").where("id", id).del()
+        return database("models").where("id", id).del()
     }
 };
